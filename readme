@@ -14,9 +14,9 @@ This README provides information on how to use the 1.8-inch TFT LCD display modu
      - **SCK** to Arduino SPI SCK (Pin 13 on most Arduino boards)
      - **SDA (MOSI)** to Arduino SPI MOSI (Pin 11 on most Arduino boards)
      - **CS** to a digital pin (e.g., Pin 10)
-     - **RESET** to a digital pin (e.g., Pin 9)
-     - **D/C (Data/Command)** to a digital pin (e.g., Pin 8)
-     - **LED (Backlight)** to Arduino 3.3V (if applicable)
+     - **RESET** to a digital pin (e.g., Pin 8)
+     - **D/C (Data/Command)** to a digital pin (e.g., Pin 7)
+     - **LED (Backlight)** to Arduino 3.3V (if applicable)or d9
 
 ### Usage
 
