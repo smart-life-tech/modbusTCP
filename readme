@@ -1,0 +1,77 @@
+# Project README
+
+## Display Module (1.8-inch TFT LCD with ST7735S Driver)
+
+This README provides information on how to use the 1.8-inch TFT LCD display module with an ST7735S driver in your project. It includes details on the hardware setup and usage of the display.
+
+### Hardware Setup
+
+1. **Wiring:**
+    **https://www.waveshare.com/w/upload/4/45/1.8-Aduino.jpg**
+   - Connect the display module to your Arduino as follows:
+     - **VCC** to Arduino 3.3V
+     - **GND** to Arduino GND
+     - **SCK** to Arduino SPI SCK (Pin 13 on most Arduino boards)
+     - **SDA (MOSI)** to Arduino SPI MOSI (Pin 11 on most Arduino boards)
+     - **CS** to a digital pin (e.g., Pin 10)
+     - **RESET** to a digital pin (e.g., Pin 9)
+     - **D/C (Data/Command)** to a digital pin (e.g., Pin 8)
+     - **LED (Backlight)** to Arduino 3.3V (if applicable)
+
+### Usage
+
+1. **Library Installation:**
+   - Install the required libraries using the Arduino Library Manager:
+     - `Adafruit_GFX` (Core graphics library)
+     - `Adafruit_ST7735` (Hardware-specific library for ST7735S)
+
+2. **Sample Code:**
+   - Use the provided sample code as a starting point for your project. You can customize it as needed.
+   - The code initializes the display, divides it into three sections, displays text and load values, and uses color-coding for load bars.
+
+3. **Customization:**
+   - Customize the code to display your specific text and load values.
+   - Adjust the display orientation, text size, and colors as needed.
+
+4. **Uploading and Testing:**
+   - Upload the code to your Arduino and observe the display.
+   - Ensure that the wiring is correct, and the library for the ST7735S driver is installed.
+
+## Modbus Communication
+
+This section provides information on how to set up and use Modbus communication in your project. It includes details on both Modbus TCP and Modbus RTU.
+
+### Modbus TCP
+
+1. **Library Installation:**
+   - Install the `ArduinoModbus` library via the Arduino Library Manager for Modbus TCP support.
+
+2. **Hardware Setup:**
+   - Ensure that your Arduino is connected to your Ethernet network.
+   - Modify the code to specify the IP address of your Modbus TCP device.
+
+3. **Usage:**
+   - Use the `ModbusTCPClient` class to communicate with your Modbus TCP device.
+   - Customize the code to read and process data from your device.
+
+### Modbus RTU
+
+1. **Library Installation:**
+   - Install the appropriate Modbus RTU library (e.g., `ModbusMaster`) via the Arduino Library Manager.
+
+2. **Hardware Setup:**
+   - Connect your Arduino to the Modbus RTU devices using RS-485 or RS-232 communication.
+   - Modify the code to configure the Modbus RTU nodes and communication settings.
+
+3. **Usage:**
+   - Use the library functions to read and process data from your Modbus RTU devices.
+   - Ensure proper error handling and synchronization if reading from multiple devices.
+
+### Important Notes:
+
+- Always refer to the documentation provided with your specific display module and Modbus devices for device-specific details.
+- Test and validate your code thoroughly in your specific hardware setup to ensure proper functionality.
+
+---
+
+Feel free to customize this README with additional details, explanations, and any specific instructions related to your project. Documenting your project thoroughly can be invaluable for yourself and others working on or using the project.
