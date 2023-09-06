@@ -32,9 +32,10 @@ void drawLoadBar(int section, int load)
   // Draw text and load value
   tft.setCursor(10, y + 10);
   tft.print("S 85°  ");
-  tft.print(load);
+  tft.print(tft.width());
   tft.setCursor(10, y + 40);
   tft.print("Z 128°");
+   tft.print(tft.height());
   tft.setCursor(10, y + 70);
   tft.print("X 32°");
 
