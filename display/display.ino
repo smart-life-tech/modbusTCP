@@ -34,8 +34,8 @@ void drawLoadBar(int section, int load)
   tft.print("S 85°  ");
   tft.print(tft.width());
   tft.setCursor(10, y + 40);
-  tft.print("Z 128°");
-   tft.print(tft.height());
+  tft.print("Z 128°  ");
+  tft.print(tft.height());
   tft.setCursor(10, y + 70);
   tft.print("X 32°");
 
