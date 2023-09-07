@@ -24,17 +24,17 @@ void setup()
   pinMode(BL, OUTPUT);
 }
 
-void drawLoadBar(int y, int load)
+void drawLoadBar(int y, int loadValue)
 {
-  int loadWidth = map(load, 0, maxLoad, 0, tft.width());
+  int loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
 
   // Determine the color based on the load value
   uint16_t loadColor;
-  if (load < 100)
+  if (loadValue < 100)
   {
     loadColor = ST7735_GREEN;
   }
-  else if (load < 200)
+  else if (loadValue < 200)
   {
     loadColor = ST7735_YELLOW;
   }
@@ -73,9 +73,9 @@ void loop()
   tft.println("°");
 
   // Draw load bars
-  drawLoadBar(25, loadS);
-  drawLoadBar(25 + sectionHeight, loadZ);
-  drawLoadBar(25 + 2 * sectionHeight, loadX);
+  // drawLoadBar(25, loadS);
+  // drawLoadBar(25 + sectionHeight, loadZ);
+  // drawLoadBar(25 + 2 * sectionHeight, loadX);
 
   delay(1000); // Adjust the update interval as needed
   toggle = !toggle;
