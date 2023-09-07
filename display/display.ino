@@ -7,7 +7,7 @@
 #define BL 9
 // Initialize the TFT display
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
-const int sectionHeight = 60; // Each section's height (pixels)
+const int sectionHeight = 40; // Each section's height (pixels)
 const int maxLoad = 200;      // Maximum load value
 bool toggle = HIGH;
 void setup()
@@ -49,28 +49,28 @@ void drawLoadBar(int y, int loadValue)
 }
 void loop()
 {
-  int loadS = 85; // Replace with your actual load values
-  int loadZ = 128;
+  int loadS = tft.width(); // Replace with your actual load values
+  int loadZ = tft.height();
   int loadX = 32;
 
   // Clear the screen
   tft.fillScreen(ST7735_BLACK);
-
+  tft.setTextSize(4);
   // Draw section labels and load values
   tft.setCursor(5, 5);
   tft.print("S ");
   tft.print(loadS);
-  tft.println("°");
+  tft.println("");
 
   tft.setCursor(5, sectionHeight + 5);
   tft.print("Z ");
   tft.print(loadZ);
-  tft.println("°");
+  tft.println("");
 
   tft.setCursor(5, 2 * sectionHeight + 5);
   tft.print("X ");
   tft.print(loadX);
-  tft.println("°");
+  tft.println("");
 
   // Draw load bars
   // drawLoadBar(25, loadS);
