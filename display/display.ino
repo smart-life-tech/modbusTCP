@@ -21,7 +21,7 @@ void setup()
 {
   delay(1000);
   tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
-  tft.setRotation(3);
+  tft.setRotation(1);
   // Set text color and size
   tft.setTextColor(ST7735_WHITE);
   tft.setTextSize(2);
@@ -92,11 +92,11 @@ void loop()
   tft.println("");
 
   // Draw load bars
-  drawLoadBar(0, loadS);
-  drawLoadBar(1, loadZ);
-  drawLoadBar(2, loadX);
+  // drawLoadBar(0, loadS);
+  // drawLoadBar(1, loadZ);
+  // drawLoadBar(2, loadX);
 
   delay(1000); // Adjust the update interval as needed
   toggle = !toggle;
-  digitalWrite(BL, toggle);
+  // digitalWrite(BL, toggle);
 }
