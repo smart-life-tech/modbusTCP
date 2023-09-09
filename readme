@@ -63,6 +63,15 @@ This section provides information on how to set up and use Modbus communication 
    - Connect your Arduino to the Modbus RTU devices using RS-485 or RS-232 communication.
    - Modify the code to configure the Modbus RTU nodes and communication settings.
 
+```shell    
+   Enc28j60	Arduino uno
+   GND	GND
+   3.3	3.3V
+   SO	Pin 12
+   SI	Pin 11
+   SCK	Pin 13
+   CS	Pin 10
+```
 3. **Usage:**
    - Use the library functions to read and process data from your Modbus RTU devices.
    - Ensure proper error handling and synchronization if reading from multiple devices.
