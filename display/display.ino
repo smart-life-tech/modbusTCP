@@ -16,7 +16,7 @@ struct section
   int SECTION_TWO;
   int SECTION_THREE;
 };
-
+section sect;
 void setup()
 {
   delay(1000);
@@ -71,7 +71,10 @@ void loop()
   int loadS = tft.width(); // Replace with your actual load values
   int loadZ = tft.height();
   int loadX = 32;
-
+  // Draw load bars
+  drawLoadBar(0, loadS);
+  drawLoadBar(1, loadZ);
+  drawLoadBar(2, loadX);
   // Clear the screen
   // tft.fillScreen(ST7735_BLACK);
   tft.setTextSize(2);
@@ -90,11 +93,6 @@ void loop()
   tft.print("X ");
   tft.print(loadX);
   tft.println("");
-
-  // Draw load bars
-  // drawLoadBar(0, loadS);
-  // drawLoadBar(1, loadZ);
-  // drawLoadBar(2, loadX);
 
   delay(1000); // Adjust the update interval as needed
   toggle = !toggle;
