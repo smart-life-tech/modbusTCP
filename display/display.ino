@@ -53,14 +53,14 @@ void drawLoadBar(int section, int loadValue)
   {
   case 0:
     // tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(10, 0, loadWidth, sectionHeight, loadColor);
     break;
   case 1:
     // tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 40, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(10, 40, loadWidth, sectionHeight, loadColor);
   case 2:
     // tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 80, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(10, 80, loadWidth, sectionHeight, loadColor);
   default:
     break;
   }
@@ -79,17 +79,17 @@ void loop()
   // tft.fillScreen(ST7735_BLACK);
   tft.setTextSize(2);
   // Draw section labels and load values
-  tft.setCursor(0, 20);
+  tft.setCursor(10, 20);
   tft.print("S ");
   tft.print(loadS);
   tft.println("");
 
-  tft.setCursor(0, 60);
+  tft.setCursor(10, 60);
   tft.print("Z ");
   tft.print(loadZ);
   tft.println("");
 
-  tft.setCursor(0, 100);
+  tft.setCursor(10, 100);
   tft.print("X ");
   tft.print(loadX);
   tft.println("");
