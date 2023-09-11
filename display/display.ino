@@ -52,15 +52,27 @@ void drawLoadBar(int section, int loadValue)
   switch (section)
   {
   case 0:
-    tft.fillRect(10, 0, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(10, 0, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
+    tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
+    if (loadValue > 100)
+    {
+      tft.fillRect(loadWidth, 0, 160 - loadWidth, sectionHeight, ST7735_RED);
+    }
     break;
   case 1:
-    tft.fillRect(10, 42, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(10, 42, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
+    tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
+    if (loadValue > 100)
+    {
+      tft.fillRect(loadWidth, 42, 160 - loadWidth, sectionHeight, ST7735_RED);
+    }
   case 2:
-    tft.fillRect(10, 85, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(10, 85, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(0, 85, tft.width(), sectionHeight, ST7735_BLACK);
+    tft.fillRect(0, 85, loadWidth, sectionHeight, loadColor);
+    if (loadValue > 100)
+    {
+      tft.fillRect(loadWidth, 85, 160 - loadWidth, sectionHeight, ST7735_RED);
+    }
   default:
     break;
   }
@@ -76,28 +88,28 @@ void loop()
 {
   int loadS = random(tft.width()); // Replace with your actual load values
   int loadZ = random(tft.height());
-  int loadX = random(200);
-  // Draw load bars 
-  textbg();
+  int loadX = random(120);
+  tft.fillScreen(ST7735_BLACK);
+  // Draw load bars
+  // textbg();
   drawLoadBar(0, loadS);
   drawLoadBar(1, loadZ);
   drawLoadBar(2, loadX);
   // Clear the screen
-  // tft.fillScreen(ST7735_BLACK);
- 
+
   tft.setTextSize(2);
   // Draw section labels and load values
-  tft.setCursor(10, 20);
+  tft.setCursor(0, 20);
   tft.print("S ");
   tft.print(loadS);
   tft.println("");
 
-  tft.setCursor(10, 60);
+  tft.setCursor(0, 62);
   tft.print("Z ");
   tft.print(loadZ);
   tft.println("");
 
-  tft.setCursor(10, 100);
+  tft.setCursor(0, 102);
   tft.print("X ");
   tft.print(loadX);
   tft.println("");
