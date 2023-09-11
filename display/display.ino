@@ -86,7 +86,7 @@ void textbg()
 }
 void colors(int value)
 {
-  if (value < 10)
+  if (value < 30)
   {
     tft.setTextColor(ST7735_WHITE);
   }else{
