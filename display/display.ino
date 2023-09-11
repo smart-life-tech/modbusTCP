@@ -23,8 +23,8 @@ void setup()
   tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
   tft.setRotation(3);
   // Set text color and size
-  tft.setTextColor(ST7735_WHITE);
-  tft.setTextSize(2);
+  tft.setTextColor(ST7735_BLUE);
+  tft.setTextSize(3);
 
   // Clear the screen
   tft.fillScreen(ST7735_BLACK);
@@ -56,11 +56,11 @@ void drawLoadBar(int section, int loadValue)
     tft.fillRect(10, 0, loadWidth, sectionHeight, loadColor);
     break;
   case 1:
-    tft.fillRect(10, 40, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(10, 40, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(10, 42, tft.width(), sectionHeight, ST7735_BLACK);
+    tft.fillRect(10, 42, loadWidth, sectionHeight, loadColor);
   case 2:
-    tft.fillRect(10, 80, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(10, 80, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(10, 85, tft.width(), sectionHeight, ST7735_BLACK);
+    tft.fillRect(10, 85, loadWidth, sectionHeight, loadColor);
   default:
     break;
   }
@@ -77,13 +77,14 @@ void loop()
   int loadS = random(tft.width()); // Replace with your actual load values
   int loadZ = random(tft.height());
   int loadX = random(200);
-  // Draw load bars
+  // Draw load bars 
+  textbg();
   drawLoadBar(0, loadS);
   drawLoadBar(1, loadZ);
   drawLoadBar(2, loadX);
   // Clear the screen
   // tft.fillScreen(ST7735_BLACK);
-  textbg();
+ 
   tft.setTextSize(2);
   // Draw section labels and load values
   tft.setCursor(10, 20);
@@ -101,7 +102,7 @@ void loop()
   tft.print(loadX);
   tft.println("");
 
-  delay(1000); // Adjust the update interval as needed
+  delay(5000); // Adjust the update interval as needed
   toggle = !toggle;
   // digitalWrite(BL, toggle);
 }
