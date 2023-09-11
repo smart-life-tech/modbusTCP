@@ -84,6 +84,13 @@ void textbg()
   tft.fillRect(8, 58, 40, 10, ST7735_BLACK);
   tft.fillRect(8, 98, 40, 10, ST7735_BLACK);
 }
+void colors(int value)
+{
+  if (value < 10)
+  {
+    tft.setTextColor(ST7735_WHITE);
+  }
+}
 void loop()
 {
   int loadS = random(tft.width()); // Replace with your actual load values
@@ -98,17 +105,20 @@ void loop()
   // Clear the screen
 
   tft.setTextSize(2);
+  colors(loadS);
   // Draw section labels and load values
   tft.setCursor(0, 20);
   tft.print("S ");
   tft.print(loadS);
   tft.println("");
 
+  colors(loadZ);
   tft.setCursor(0, 62);
   tft.print("Z ");
   tft.print(loadZ);
   tft.println("");
 
+  colors(loadX);
   tft.setCursor(0, 102);
   tft.print("X ");
   tft.print(loadX);
