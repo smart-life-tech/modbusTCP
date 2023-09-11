@@ -67,11 +67,11 @@ void drawLoadBar(int section, int loadValue)
       tft.fillRect(loadWidth, 42, 160 - loadWidth, sectionHeight, ST7735_RED);
     }
   case 2:
-    tft.fillRect(0, 85, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 85, loadWidth, sectionHeight, loadColor);
+    tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
+    tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
     if (loadValue > 100)
     {
-      tft.fillRect(loadWidth, 85, 160 - loadWidth, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth, 84, 160 - loadWidth, sectionHeight, ST7735_RED);
     }
   default:
     break;
@@ -89,6 +89,8 @@ void colors(int value)
   if (value < 10)
   {
     tft.setTextColor(ST7735_WHITE);
+  }else{
+     tft.setTextColor(ST7735_BLUE);
   }
 }
 void loop()
