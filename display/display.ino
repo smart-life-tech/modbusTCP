@@ -109,14 +109,14 @@ void loop()
   // Clear the screen
 
   tft.setTextSize(2);
-
+  textbg();
   // Draw section labels and load values
   tft.setCursor(0, 20);
   tft.setTextColor(ST7735_BLUE);
   tft.print("S ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadS);
-  tft.setCursor(150, 20);
+  tft.setCursor(100, 20);
   tft.setTextColor(ST7735_BLUE);
   tft.print("228");
   tft.println("");
@@ -126,7 +126,7 @@ void loop()
   tft.print("Z ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadZ);
-  tft.setCursor(150, 62);
+  tft.setCursor(100, 62);
   tft.setTextColor(ST7735_BLUE);
   tft.print("228");
   tft.println("");
@@ -136,7 +136,7 @@ void loop()
   tft.print("X ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadX);
-  tft.setCursor(150, 102);
+  tft.setCursor(100, 102);
   tft.setTextColor(ST7735_BLUE);
   tft.print("228");
   tft.println("");
