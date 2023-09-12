@@ -119,7 +119,7 @@ void loop()
   tft.setCursor(100, 20);
   tft.setTextColor(ST7735_BLUE);
   tft.print("228");
-  tft.println("");
+  //tft.println("");
 
   tft.setCursor(0, 62);
   tft.setTextColor(ST7735_BLUE);
@@ -129,7 +129,7 @@ void loop()
   tft.setCursor(100, 62);
   tft.setTextColor(ST7735_BLUE);
   tft.print("228");
-  tft.println("");
+  //tft.println("");
 
   tft.setCursor(0, 102);
   tft.setTextColor(ST7735_BLUE);
@@ -139,7 +139,7 @@ void loop()
   tft.setCursor(100, 102);
   tft.setTextColor(ST7735_BLUE);
   tft.print("228");
-  tft.println("");
+  //tft.println("");
 
   delay(5000); // Adjust the update interval as needed
 }
