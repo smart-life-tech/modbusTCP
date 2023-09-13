@@ -5,10 +5,11 @@
 #define TFT_RST 8 // Reset line for TFT (or connect to +3.3V)
 #define TFT_DC 7  // Data/Command line for TFT
 #define BL 9
+int loadWidth = 100;
 // Initialize the TFT display
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 const int sectionHeight = 40; // Each section's height (pixels)
-const int maxLoad = 200;      // Maximum load value
+const int maxLoad = 210;      // Maximum load value
 bool toggle = HIGH;
 
 int loads[3] = {};
@@ -32,7 +33,6 @@ void setup()
 
 void drawLoadBar(int section, int loadValue)
 {
-  int loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
 
   // Determine the color based on the load value
   uint16_t loadColor;
@@ -44,32 +44,52 @@ void drawLoadBar(int section, int loadValue)
   {
     loadColor = ST7735_YELLOW;
   }
-  else
-  {
-    loadColor = ST7735_RED;
-  }
   switch (section)
   {
   case 0:
-    tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
+    if (loadValue <= 100)
+    {
+      loadWidth = map(loadValue, 0, 100, 0, tft.width());
+      tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
+      tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
+    }
     if (loadValue > 100)
     {
+      loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
+      loadWidth = 160 - loadWidth;
+      tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
+      tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
       tft.fillRect(loadWidth, 0, 160 - loadWidth, sectionHeight, ST7735_RED);
     }
     break;
   case 1:
-    tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
+    if (loadValue <= 100)
+    {
+      loadWidth = map(loadValue, 0, 100, 0, tft.width());
+      tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
+      tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
+    }
     if (loadValue > 100)
     {
+      loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
+      loadWidth = 160 - loadWidth;
+      tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
+      tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
       tft.fillRect(loadWidth, 42, 160 - loadWidth, sectionHeight, ST7735_RED);
     }
   case 2:
-    tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
-    tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
+    if (loadValue <= 100)
+    {
+      loadWidth = map(loadValue, 0, 100, 0, tft.width());
+      tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
+      tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
+    }
     if (loadValue > 100)
     {
+      loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
+      loadWidth = 160 - loadWidth;
+      tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
+      tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
       tft.fillRect(loadWidth, 84, 160 - loadWidth, sectionHeight, ST7735_RED);
     }
   default:
