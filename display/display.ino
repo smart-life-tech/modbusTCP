@@ -17,7 +17,7 @@ int loads[3] = {};
 void setup()
 {
   delay(1000);
-  //tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
+  // tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
   tft.initR(0x02);
   tft.setRotation(3);
   // Set text color and size
@@ -56,8 +56,10 @@ void drawLoadBar(int section, int loadValue)
     }
     if (loadValue > 100)
     {
-      loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
-      loadWidth = 160 - loadWidth;
+      loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
+      loadValue = loadValue - 100;         // reminder value for the red
+      loadValue = 100 - loadValue;         // value for the yellow
+      loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
       tft.fillRect(loadWidth, 0, 160 - loadWidth, sectionHeight, ST7735_RED);
@@ -72,8 +74,10 @@ void drawLoadBar(int section, int loadValue)
     }
     if (loadValue > 100)
     {
-      loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
-      loadWidth = 160 - loadWidth;
+      loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
+      loadValue = loadValue - 100;         // reminder value for the red
+      loadValue = 100 - loadValue;         // value for the yellow
+      loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
       tft.fillRect(loadWidth, 42, 160 - loadWidth, sectionHeight, ST7735_RED);
@@ -87,8 +91,10 @@ void drawLoadBar(int section, int loadValue)
     }
     if (loadValue > 100)
     {
-      loadWidth = map(loadValue, 0, maxLoad, 0, tft.width());
-      loadWidth = 160 - loadWidth;
+      loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
+      loadValue = loadValue - 100;         // reminder value for the red
+      loadValue = 100 - loadValue;         // value for the yellow
+      loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
       tft.fillRect(loadWidth, 84, 160 - loadWidth, sectionHeight, ST7735_RED);
