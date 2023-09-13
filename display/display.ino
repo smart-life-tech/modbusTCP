@@ -17,7 +17,8 @@ int loads[3] = {};
 void setup()
 {
   delay(1000);
-  tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
+  //tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
+  tft.initR(0x02);
   tft.setRotation(3);
   // Set text color and size
   tft.setTextColor(ST7735_BLUE);
