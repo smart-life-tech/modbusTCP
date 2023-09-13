@@ -109,6 +109,8 @@ void loop()
     {
         // read the current value of the coil
         int coilValue = ModbusRTUServer.coilRead(0x00);
+        Serial.print("coil value");
+        Serial.println(coilValue);
 
         if (coilValue)
         {
