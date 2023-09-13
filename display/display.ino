@@ -10,13 +10,9 @@ Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 const int sectionHeight = 40; // Each section's height (pixels)
 const int maxLoad = 200;      // Maximum load value
 bool toggle = HIGH;
-struct section
-{
-  int SECTION_ONE;
-  int SECTION_TWO;
-  int SECTION_THREE;
-};
-section sect;
+
+int loads[3] = {};
+
 void setup()
 {
   delay(1000);
@@ -29,6 +25,9 @@ void setup()
   // Clear the screen
   tft.fillScreen(ST7735_BLACK);
   pinMode(BL, OUTPUT);
+  loads[0] = 0;
+  loads[1] = 0;
+  loads[2] = 0;
 }
 
 void drawLoadBar(int section, int loadValue)
@@ -80,19 +79,27 @@ void drawLoadBar(int section, int loadValue)
 }
 void textbg()
 {
-  tft.fillRect(20, 18, 40, 15, ST7735_BLACK);
-  tft.fillRect(20, 58, 40, 15, ST7735_BLACK);
-  tft.fillRect(20, 98, 40, 15, ST7735_BLACK);
+  tft.fillRect(20, 10, 45, 23, ST7735_BLACK);
+  tft.fillRect(20, 50, 45, 23, ST7735_BLACK);
+  tft.fillRect(20, 93, 45, 23, ST7735_BLACK);
 }
-void colors(int value)
+
+int greatLoad(int section, int load)
 {
-  if (value < 30)
+  for (int i = 0; i < 3; i++)
   {
-    tft.setTextColor(ST7735_WHITE);
-  }
-  else
-  {
-    tft.setTextColor(ST7735_BLUE);
+    if (section == i)
+    {
+      if (load > loads[i])
+      {
+        loads[i] = load;
+        return load;
+      }
+      else
+      {
+        return loads[i];
+      }
+    }
   }
 }
 void loop()
@@ -111,35 +118,35 @@ void loop()
   tft.setTextSize(2);
   textbg();
   // Draw section labels and load values
-  tft.setCursor(0, 20);
+  tft.setCursor(2, 15);
   tft.setTextColor(ST7735_BLUE);
   tft.print("S ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadS);
-  tft.setCursor(100, 20);
+  tft.setCursor(120, 15);
   tft.setTextColor(ST7735_BLUE);
-  tft.print("228");
-  //tft.println("");
+  tft.print(greatLoad(0, loadS));
+  // tft.println("");
 
-  tft.setCursor(0, 62);
+  tft.setCursor(2, 55);
   tft.setTextColor(ST7735_BLUE);
   tft.print("Z ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadZ);
-  tft.setCursor(100, 62);
+  tft.setCursor(120, 55);
   tft.setTextColor(ST7735_BLUE);
-  tft.print("228");
-  //tft.println("");
+  tft.print(greatLoad(1, loadZ));
+  // tft.println("");
 
-  tft.setCursor(0, 102);
+  tft.setCursor(2, 98);
   tft.setTextColor(ST7735_BLUE);
   tft.print("X ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadX);
-  tft.setCursor(100, 102);
+  tft.setCursor(120, 98);
   tft.setTextColor(ST7735_BLUE);
-  tft.print("228");
-  //tft.println("");
+  tft.print(greatLoad(2, loadX));
+  // tft.println("");
 
   delay(5000); // Adjust the update interval as needed
 }
