@@ -62,7 +62,7 @@ void drawLoadBar(int section, int loadValue)
       loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
-      tft.fillRect(loadWidth-5, 0, 160 - loadWidth, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth - 5, 0, 160, sectionHeight, ST7735_RED);
     }
     break;
   case 1:
@@ -80,7 +80,7 @@ void drawLoadBar(int section, int loadValue)
       loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
-      tft.fillRect(loadWidth-5, 42, 160 - loadWidth, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth - 5, 42, 160, sectionHeight, ST7735_RED);
     }
   case 2:
     if (loadValue <= 100)
@@ -97,7 +97,7 @@ void drawLoadBar(int section, int loadValue)
       loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
-      tft.fillRect(loadWidth-5, 84, 160 - loadWidth, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth - 5, 84, 160, sectionHeight, ST7735_RED);
     }
   default:
     break;
