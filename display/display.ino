@@ -6,7 +6,7 @@
 #define TFT_DC 7  // Data/Command line for TFT
 #define BL 9
 int loadWidth = 100;
-int offset =8;
+int offset = 8;
 // Initialize the TFT display
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 const int sectionHeight = 40; // Each section's height (pixels)
@@ -19,7 +19,7 @@ void setup()
 {
   delay(1000);
   // tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
-  tft.initR(0x02);
+  tft.initR(0x00);
   tft.setRotation(3);
   // Set text color and size
   tft.setTextColor(ST7735_BLUE);
@@ -44,7 +44,13 @@ void drawLoadBar(int section, int loadValue)
   }
   else if (loadValue < 200)
   {
-    loadColor = ST7735_YELLOW;
+    // yellow will be one of this color
+    /*
+  ST7735_CYAN 
+  ST7735_MAGENTA 
+    ST7735_ORANGE 
+    */
+    loadColor = ST7735_CYAN;
   }
   switch (section)
   {
@@ -63,7 +69,7 @@ void drawLoadBar(int section, int loadValue)
       loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
-      tft.fillRect(loadWidth - offset, 0, 160, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth - offset, 0, 160, sectionHeight, ST7735_BLUE);
     }
     break;
   case 1:
@@ -81,7 +87,7 @@ void drawLoadBar(int section, int loadValue)
       loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
-      tft.fillRect(loadWidth - offset, 42, 160, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth - offset, 42, 160, sectionHeight, ST7735_BLUE);
     }
   case 2:
     if (loadValue <= 100)
@@ -98,7 +104,7 @@ void drawLoadBar(int section, int loadValue)
       loadWidth = map(loadValue, 0, 100, 0, tft.width());
       tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
       tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
-      tft.fillRect(loadWidth - offset, 84, 160, sectionHeight, ST7735_RED);
+      tft.fillRect(loadWidth - offset, 84, 160, sectionHeight, ST7735_BLUE);
     }
   default:
     break;
@@ -147,32 +153,32 @@ void loop()
   textbg();
   // Draw section labels and load values
   tft.setCursor(2, 15);
-  tft.setTextColor(ST7735_BLUE);
+  tft.setTextColor(ST7735_RED);
   tft.print("S ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadS);
   tft.setCursor(120, 15);
-  tft.setTextColor(ST7735_BLUE);
+  tft.setTextColor(ST7735_RED);
   tft.print(greatLoad(0, loadS));
   // tft.println("");
 
   tft.setCursor(2, 55);
-  tft.setTextColor(ST7735_BLUE);
+  tft.setTextColor(ST7735_RED);
   tft.print("Z ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadZ);
   tft.setCursor(120, 55);
-  tft.setTextColor(ST7735_BLUE);
+  tft.setTextColor(ST7735_RED);
   tft.print(greatLoad(1, loadZ));
   // tft.println("");
 
   tft.setCursor(2, 98);
-  tft.setTextColor(ST7735_BLUE);
+  tft.setTextColor(ST7735_RED);
   tft.print("X ");
   tft.setTextColor(ST7735_WHITE);
   tft.print(loadX);
   tft.setCursor(120, 98);
-  tft.setTextColor(ST7735_BLUE);
+  tft.setTextColor(ST7735_RED);
   tft.print(greatLoad(2, loadX));
   // tft.println("");
 
