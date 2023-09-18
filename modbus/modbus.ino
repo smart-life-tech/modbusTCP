@@ -2,15 +2,15 @@
 #include <ArduinoRS485.h> // ArduinoModbus depends on the ArduinoRS485 library
 #include <ArduinoModbus.h>
 #include <SPI.h>
-#include <Ethernet.h>
+// #include <Ethernet.h>
 #include <EtherCard.h>
 
 const int ledPin = LED_BUILTIN;
 byte mac[] = {
     0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
-IPAddress ip(192, 168, 1, 177);
+// IPAddress ip(192, 168, 1, 177);
 
-EthernetServer ethServer(502);
+// EthernetServer ethServer(502);
 static byte myip[] = {192, 168, 1, 177}; // Static IP Definition/Setting the static IP
 static byte gwip[] = {192, 168, 2, 1};   // Gateway IP address of the network
 ModbusTCPServer modbusTCPServer;
@@ -19,7 +19,7 @@ void setup()
 {
     Serial.begin(9600);
     if (ether.begin(sizeof Ethernet::buffer, mac) == 0)
-        Serial.println("Falha ao aceder ao controlador Ethernet/Failed to access Ethernet controller");
+        Serial.println("Failed to access Ethernet controller");
 
     ether.staticSetup(myip, gwip);
 
@@ -28,7 +28,7 @@ void setup()
     ether.printIp("GW: ", ether.gwip);
     ether.printIp("DNS: ", ether.dnsip);
     // You can use Ethernet.init(pin) to configure the CS pin
-    Ethernet.init(10); // Most Arduino shields
+    // Ethernet.init(10); // Most Arduino shields
     // Ethernet.init(5);   // MKR ETH shield
     // Ethernet.init(0);   // Teensy 2.0
     // Ethernet.init(20);  // Teensy++ 2.0
@@ -36,7 +36,7 @@ void setup()
     // Ethernet.init(33);  // ESP32 with Adafruit Featherwing Ethernet
 
     // start the Ethernet connection and the server:
-    Ethernet.begin(mac, ip);
+    /*Ethernet.begin(mac, ip);
 
     // Check for Ethernet hardware present
     if (Ethernet.hardwareStatus() == EthernetNoHardware)
@@ -71,7 +71,7 @@ void setup()
     modbusTCPServer.configureCoils(0x00, 1);
 
     Serial.println("Modbus RTU Server LED");
-
+*/
     // start the Modbus RTU server, with (slave) id 1
     if (!ModbusRTUServer.begin(1, 9600))
     {
@@ -91,53 +91,55 @@ void setup()
 void loop()
 {
     // listen for incoming clients
-    EthernetClient client = ethServer.available();
+    /* EthernetClient client = ethServer.available();
 
-    if (client)
-    {
-        // a new client connected
-        Serial.println("new client");
+     if (client)
+     {
+         // a new client connected
+         Serial.println("new client");
 
-        // let the Modbus TCP accept the connection
-        modbusTCPServer.accept(client);
+         // let the Modbus TCP accept the connection
+         modbusTCPServer.accept(client);
 
-        while (client.connected())
-        {
-            // poll for Modbus TCP requests, while client connected
-            modbusTCPServer.poll();
+         while (client.connected())
+         {
+             // poll for Modbus TCP requests, while client connected
+             modbusTCPServer.poll();
 
-            // update the LED
-            updateLED();
-        }
+             // update the LED
+             updateLED();
+         }
 
-        Serial.println("client disconnected");
-    }
+         Serial.println("client disconnected");
+     }
 
-    // poll for Modbus RTU requests
-    int packetReceived = ModbusRTUServer.poll();
+     // poll for Modbus RTU requests
+     int packetReceived = ModbusRTUServer.poll();
 
-    if (packetReceived)
-    {
-        // read the current value of the coil
-        int coilValue = ModbusRTUServer.coilRead(0x00);
-        Serial.print("coil value");
-        Serial.println(coilValue);
+     if (packetReceived)
+     {
+         // read the current value of the coil
+         int coilValue = ModbusRTUServer.coilRead(0x00);
+         Serial.print("coil value");
+         Serial.println(coilValue);
 
-        if (coilValue)
-        {
-            // coil value set, turn LED on
-            digitalWrite(ledPin, HIGH);
-        }
-        else
-        {
-            // coil value clear, turn LED off
-            digitalWrite(ledPin, LOW);
-        }
-    }
+         if (coilValue)
+         {
+             // coil value set, turn LED on
+             digitalWrite(ledPin, HIGH);
+         }
+         else
+         {
+             // coil value clear, turn LED off
+             digitalWrite(ledPin, LOW);
+         }
+     }*/
     if (ether.packetLoop(ether.packetReceive()))
     {
-        memcpy_P(ether.tcpOffset(), page, sizeof page);
-        ether.httpServerReply(sizeof page - 1);
+        Serial.println(ether.packetReceive());
+        Serial.println(ether.packetLoop(ether.packetReceive()));
+        // memcpy_P(ether.tcpOffset(), page, sizeof page);
+        // ether.httpServerReply(sizeof page - 1);
     }
 }
 
