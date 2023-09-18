@@ -9,9 +9,10 @@ const int ledPin = LED_BUILTIN;
 byte mac[] = {
     0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 1, 177);
-IPAddress gwip(192, 168, 1, 177);
-EthernetServer ethServer(502);
 
+EthernetServer ethServer(502);
+static byte myip[] = {192, 168, 1, 177}; // Static IP Definition/Setting the static IP
+static byte gwip[] = {192, 168, 2, 1};   // Gateway IP address of the network
 ModbusTCPServer modbusTCPServer;
 byte Ethernet::buffer[500];
 void setup()
@@ -20,7 +21,7 @@ void setup()
     if (ether.begin(sizeof Ethernet::buffer, mac) == 0)
         Serial.println("Falha ao aceder ao controlador Ethernet/Failed to access Ethernet controller");
 
-    ether.staticSetup(ip, gwip);
+    ether.staticSetup(myip, gwip);
 
     Serial.println("Network parameters");
     ether.printIp("IP: ", ether.myip);
