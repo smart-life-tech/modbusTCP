@@ -46,9 +46,9 @@ void drawLoadBar(int section, int loadValue)
   {
     // yellow will be one of this color
     /*
-  ST7735_CYAN 
-  ST7735_MAGENTA 
-    ST7735_ORANGE 
+  ST7735_CYAN
+  ST7735_MAGENTA
+    ST7735_ORANGE
     */
     loadColor = ST7735_CYAN;
   }

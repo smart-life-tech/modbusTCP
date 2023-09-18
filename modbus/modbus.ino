@@ -3,21 +3,31 @@
 #include <ArduinoModbus.h>
 #include <SPI.h>
 #include <Ethernet.h>
+#include <EtherCard.h>
 
 const int ledPin = LED_BUILTIN;
 byte mac[] = {
     0xDE, 0xAD, 0xBE, 0xEF, 0xFE, 0xED};
 IPAddress ip(192, 168, 1, 177);
-
+IPAddress gwip(192, 168, 1, 177);
 EthernetServer ethServer(502);
 
 ModbusTCPServer modbusTCPServer;
-
+byte Ethernet::buffer[500];
 void setup()
 {
     Serial.begin(9600);
+    if (ether.begin(sizeof Ethernet::buffer, mac) == 0)
+        Serial.println("Falha ao aceder ao controlador Ethernet/Failed to access Ethernet controller");
+
+    ether.staticSetup(ip, gwip);
+
+    Serial.println("Network parameters");
+    ether.printIp("IP: ", ether.myip);
+    ether.printIp("GW: ", ether.gwip);
+    ether.printIp("DNS: ", ether.dnsip);
     // You can use Ethernet.init(pin) to configure the CS pin
-     Ethernet.init(10);  // Most Arduino shields
+    Ethernet.init(10); // Most Arduino shields
     // Ethernet.init(5);   // MKR ETH shield
     // Ethernet.init(0);   // Teensy 2.0
     // Ethernet.init(20);  // Teensy++ 2.0
@@ -122,6 +132,11 @@ void loop()
             // coil value clear, turn LED off
             digitalWrite(ledPin, LOW);
         }
+    }
+    if (ether.packetLoop(ether.packetReceive()))
+    {
+        memcpy_P(ether.tcpOffset(), page, sizeof page);
+        ether.httpServerReply(sizeof page - 1);
     }
 }
 

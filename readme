@@ -58,13 +58,15 @@ This section provides information on how to set up and use Modbus communication 
 
 1. **Library Installation:**
    - Install the appropriate Modbus RTU library (e.g., `ModbusMaster`) via the Arduino Library Manager.
+    and also this library `https://github.com/njh/EtherCard/archive/master.zip`
 
 2. **Hardware Setup:**
    - Connect your Arduino to the Modbus RTU devices using RS-485 or RS-232 communication.
    - Modify the code to configure the Modbus RTU nodes and communication settings.
 
 ```shell    
-   Enc28j60	Arduino uno
+ 
+   Enc28j60	Arduino uno 
    GND	GND
    3.3	3.3V
    SO	Pin 12

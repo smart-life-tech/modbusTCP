@@ -1,4 +1,4 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "display//display.ino"
+    "sketch": "modbus\\modbus.ino"
 }
