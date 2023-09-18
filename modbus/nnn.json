@@ -1,0 +1,117 @@
+{
+    "name": "Color Control",
+    "status": "live",
+    "attributes": {
+        "color": {
+            "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "value": {
+                        "title": "String",
+                        "type": "string",
+                        "maxLength": 255
+                    }
+                }
+            },
+            "setter": "setColor",
+            "actedOnBy": [
+                "setHue",
+                "setSaturation"
+            ]
+        },
+        "hue": {
+            "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "value": {
+                        "title": "PositiveNumber",
+                        "type": "number",
+                        "minimum": 0
+                    }
+                }
+            },
+            "setter": "setHue"
+        },
+        "saturation": {
+            "schema": {
+                "type": "object",
+                "additionalProperties": false,
+                "properties": {
+                    "value": {
+                        "title": "PositiveNumber",
+                        "type": "number",
+                        "minimum": 0
+                    }
+                }
+            },
+            "setter": "setSaturation"
+        }
+    },
+    "commands": {
+        "setColor": {
+            "arguments": [
+                {
+                    "name": "color",
+                    "schema": {
+                        "title": "COLOR_MAP",
+                        "type": "object",
+                        "additionalProperties": false,
+                        "properties": {
+                            "hue": {
+                                "type": "number"
+                            },
+                            "saturation": {
+                                "type": "number"
+                            },
+                            "hex": {
+                                "type": "string",
+                                "maxLength": 7
+                            },
+                            "level": {
+                                "type": "integer"
+                            },
+                            "switch": {
+                                "type": "string",
+                                "maxLength": 3
+                            }
+                        }
+                    },
+                    "optional": false
+                }
+            ],
+            "name": "setColor"
+        },
+        "setHue": {
+            "arguments": [
+                {
+                    "name": "hue",
+                    "schema": {
+                        "title": "PositiveNumber",
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "optional": false
+                }
+            ],
+            "name": "setHue"
+        },
+        "setSaturation": {
+            "arguments": [
+                {
+                    "name": "saturation",
+                    "schema": {
+                        "title": "PositiveNumber",
+                        "type": "number",
+                        "minimum": 0
+                    },
+                    "optional": false
+                }
+            ],
+            "name": "setSaturation"
+        }
+    },
+    "id": "colorControl",
+    "version": 1
+}

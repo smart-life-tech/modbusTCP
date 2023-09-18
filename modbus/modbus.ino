@@ -54,7 +54,7 @@ void setup()
 
     // start the server
     ethServer.begin();
-
+*/
     // start the Modbus TCP server
     if (!modbusTCPServer.begin())
     {
@@ -71,7 +71,7 @@ void setup()
     modbusTCPServer.configureCoils(0x00, 1);
 
     Serial.println("Modbus RTU Server LED");
-*/
+
     // start the Modbus RTU server, with (slave) id 1
     if (!ModbusRTUServer.begin(1, 9600))
     {
@@ -111,29 +111,29 @@ void loop()
          }
 
          Serial.println("client disconnected");
-     }
-
-     // poll for Modbus RTU requests
-     int packetReceived = ModbusRTUServer.poll();
-
-     if (packetReceived)
-     {
-         // read the current value of the coil
-         int coilValue = ModbusRTUServer.coilRead(0x00);
-         Serial.print("coil value");
-         Serial.println(coilValue);
-
-         if (coilValue)
-         {
-             // coil value set, turn LED on
-             digitalWrite(ledPin, HIGH);
-         }
-         else
-         {
-             // coil value clear, turn LED off
-             digitalWrite(ledPin, LOW);
-         }
      }*/
+
+    // poll for Modbus RTU requests
+    int packetReceived = ModbusRTUServer.poll();
+
+    if (packetReceived)
+    {
+        // read the current value of the coil
+        int coilValue = ModbusRTUServer.coilRead(0x00);
+        Serial.print("coil value");
+        Serial.println(coilValue);
+
+        if (coilValue)
+        {
+            // coil value set, turn LED on
+            digitalWrite(ledPin, HIGH);
+        }
+        else
+        {
+            // coil value clear, turn LED off
+            digitalWrite(ledPin, LOW);
+        }
+    }
     if (ether.packetLoop(ether.packetReceive()))
     {
         Serial.println(ether.packetReceive());
