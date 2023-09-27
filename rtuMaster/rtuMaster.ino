@@ -1,163 +1,68 @@
-#include <ArduinoRS485.h> // ArduinoModbus depends on the ArduinoRS485 library
-#include <ArduinoModbus.h>//https://www.arduino.cc/reference/en/libraries/arduinomodbus/
-//https://en.wikipedia.org/wiki/Modbus
-int counter = 0;
+#include <ModbusMaster.h>
 
-void setup() {
-  Serial.begin(9600);
-  while (!Serial);
+/*!
+  We're using a MAX485-compatible RS485 Transceiver.
+  Rx/Tx is hooked up to the hardware serial port at 'Serial'.
+  The Data Enable and Receiver Enable pins are hooked up as follows:
+*/
+#define MAX485_DE 3
+#define MAX485_RE_NEG 2
 
-  Serial.println("Modbus RTU ");
+// instantiate ModbusMaster object
+ModbusMaster node;
 
-  // start the Modbus RTU client
-  if (!ModbusRTUClient.begin(9600)) {
-    Serial.println("Failed to start Modbus RTU Client!");
-    while (1);
-  }
+void preTransmission()
+{
+  digitalWrite(MAX485_RE_NEG, 1);
+  digitalWrite(MAX485_DE, 1);
 }
 
-void loop() {
-  writeCoilValues();
-
-  readCoilValues();
-
-  readDiscreteInputValues();
-
-  writeHoldingRegisterValues();
-
-  readHoldingRegisterValues();
-
-  readInputRegisterValues();
-
-  counter++;
-
-  delay(5000);
-  Serial.println();
+void postTransmission()
+{
+  digitalWrite(MAX485_RE_NEG, 0);
+  digitalWrite(MAX485_DE, 0);
 }
 
-void writeCoilValues() {
-  // set the coils to 1 when counter is odd
-  byte coilValue = ((counter % 2) == 0) ? 0x00 : 0x01;
+void setup()
+{
+  pinMode(MAX485_RE_NEG, OUTPUT);
+  pinMode(MAX485_DE, OUTPUT);
+  // Init in receive mode
+  digitalWrite(MAX485_RE_NEG, 0);
+  digitalWrite(MAX485_DE, 0);
 
-  Serial.print("Writing Coil values ... ");
+  // Modbus communication runs at 115200 baud
+  Serial.begin(115200);
 
-  // write 10 Coil values to (slave) id 42, address 0x00
-  ModbusRTUClient.beginTransmission(42, COILS, 0x00, 10);
-  for (int i = 0; i < 10; i++) {
-    ModbusRTUClient.write(coilValue);
-  }
-  if (!ModbusRTUClient.endTransmission()) {
-    Serial.print("failed! ");
-    Serial.println(ModbusRTUClient.lastError());
-  } else {
-    Serial.println("success");
-  }
-
-  // Alternatively, to write a single Coil value use:
-  // ModbusRTUClient.coilWrite(...)
+  // Modbus slave ID 1
+  node.begin(1, Serial);
+  // Callbacks allow us to configure the RS485 transceiver correctly
+  node.preTransmission(preTransmission);
+  node.postTransmission(postTransmission);
 }
 
-void readCoilValues() {
-  Serial.print("Reading Coil values ... ");
+bool state = true;
 
-  // read 10 Coil values from (slave) id 42, address 0x00
-  if (!ModbusRTUClient.requestFrom(42, COILS, 0x00, 10)) {
-    Serial.print("failed! ");
-    Serial.println(ModbusRTUClient.lastError());
-  } else {
-    Serial.println("success");
+void loop()
+{
+  uint8_t result;
+  uint16_t data[6];
 
-    while (ModbusRTUClient.available()) {
-      Serial.print(ModbusRTUClient.read());
-      Serial.print(' ');
-    }
-    Serial.println();
+  // Toggle the coil at address 0x0002 (Manual Load Control)
+  result = node.writeSingleCoil(0x0002, state);
+  state = !state;
+
+  // Read 16 registers starting at 0x3100)
+  result = node.readInputRegisters(0x2228, 16);
+  if (result == node.ku8MBSuccess)
+  {
+    Serial.print("current1: ");
+    Serial.println(node.getResponseBuffer(0x04) / 100.0f);
+    Serial.print("current: ");
+    Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
+    Serial.print("current3: ");
+    Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
   }
 
-  // Alternatively, to read a single Coil value use:
-  // ModbusRTUClient.coilRead(...)
-}
-
-void readDiscreteInputValues() {
-  Serial.print("Reading Discrete Input values ... ");
-
-  // read 10 Discrete Input values from (slave) id 42, address 0x00
-  if (!ModbusRTUClient.requestFrom(42, DISCRETE_INPUTS, 0x00, 10)) {
-    Serial.print("failed! ");
-    Serial.println(ModbusRTUClient.lastError());
-  } else {
-    Serial.println("success");
-
-    while (ModbusRTUClient.available()) {
-      Serial.print(ModbusRTUClient.read());
-      Serial.print(' ');
-    }
-    Serial.println();
-  }
-
-  // Alternatively, to read a single Discrete Input value use:
-  // ModbusRTUClient.discreteInputRead(...)
-}
-
-void writeHoldingRegisterValues() {
-  // set the Holding Register values to counter
-
-  Serial.print("Writing Holding Registers values ... ");
-
-  // write 10 coil values to (slave) id 42, address 0x00
-  ModbusRTUClient.beginTransmission(42, HOLDING_REGISTERS, 0x00, 10);
-  for (int i = 0; i < 10; i++) {
-    ModbusRTUClient.write(counter);
-  }
-  if (!ModbusRTUClient.endTransmission()) {
-    Serial.print("failed! ");
-    Serial.println(ModbusRTUClient.lastError());
-  } else {
-    Serial.println("success");
-  }
-
-  // Alternatively, to write a single Holding Register value use:
-  // ModbusRTUClient.holdingRegisterWrite(...)
-}
-
-void readHoldingRegisterValues() {
-  Serial.print("Reading Input Register values ... ");
-
-  // read 10 Input Register values from (slave) id 42, address 0x00
-  if (!ModbusRTUClient.requestFrom(42, HOLDING_REGISTERS, 0x00, 10)) {
-    Serial.print("failed! ");
-    Serial.println(ModbusRTUClient.lastError());
-  } else {
-    Serial.println("success");
-
-    while (ModbusRTUClient.available()) {
-      Serial.print(ModbusRTUClient.read());
-      Serial.print(' ');
-    }
-    Serial.println();
-  }
-
-  // Alternatively, to read a single Holding Register value use:
-  // ModbusRTUClient.holdingRegisterRead(...)
-}
-
-void readInputRegisterValues() {
-  Serial.print("Reading input register values ... ");
-
-  // read 10 discrete input values from (slave) id 42,
-  if (!ModbusRTUClient.requestFrom(42, INPUT_REGISTERS, 0x00, 10)) {
-    Serial.print("failed! ");
-    Serial.println(ModbusRTUClient.lastError());
-  } else {
-    Serial.println("success");
-
-    while (ModbusRTUClient.available()) {
-      Serial.print(ModbusRTUClient.read());
-      Serial.print(' ');
-    }
-    Serial.println();
-  }
-
-  // Alternatively, to read a single Input Register value use:
-  // ModbusRTUClient.inputRegisterRead(...)
+  delay(1000);
 }

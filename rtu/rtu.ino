@@ -14,6 +14,7 @@ void setup()
     master.addHoldingRegister(&analogOut[0], 0x2228); // spindle
     master.addHoldingRegister(&analogOut[1], 0x1008); // z axis
     master.addHoldingRegister(&analogOut[2], 0x3002); // y axis(not sure yet)
+   
 }
 
 void loop()
