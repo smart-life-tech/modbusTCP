@@ -1,6 +1,6 @@
 #include <ArduinoRS485.h> // ArduinoModbus depends on the ArduinoRS485 library
-#include <ArduinoModbus.h>
-
+#include <ArduinoModbus.h>//https://www.arduino.cc/reference/en/libraries/arduinomodbus/
+//https://en.wikipedia.org/wiki/Modbus
 int counter = 0;
 
 void setup() {
