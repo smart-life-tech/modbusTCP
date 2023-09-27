@@ -1,4 +1,4 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "rtu\\rtu.ino"
+    "sketch": "rtuMaster\\rtuMaster.ino"
 }
