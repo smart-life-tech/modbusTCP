@@ -61,6 +61,7 @@ void setup()
     // Init in receive mode
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
+    spindleSerial.begin(115200);
     node.begin(1, Serial);
     spindle.begin(2, spindleSerial);
     // Callbacks allow us to configure the RS485 transceiver correctly
@@ -221,6 +222,7 @@ void loop()
      int loadZ = random(tft.height());
      int loadX = random(120);*/
     tft.fillScreen(ST7735_BLACK);
+    getData();
     // Draw load bars
     textbg();
     drawLoadBar(0, loadS);
