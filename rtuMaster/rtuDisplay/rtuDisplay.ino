@@ -188,19 +188,19 @@ uint64_t getData()
     data = spindle.readHoldingRegisters(0x2228, 16);
     result = node.readHoldingRegisters(0x2228, 10);
 
-    if (result == node.ku8MBSuccess)
-    {
-        Serial.print("current1: ");
-        Serial.println(node.getResponseBuffer(0x04) / 100.0f);
-        Serial.print("current: ");
-        Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
-        Serial.print("current3: ");
-        Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
+    // if (result == node.ku8MBSuccess)
+    // {
+    Serial.print("current1: ");
+    Serial.println(node.getResponseBuffer(0x00));
+    Serial.print("current: ");
+    Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
+    Serial.print("current3: ");
+    Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
 
-        loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
-        int loadZ = random(tft.height());
-        int loadX = random(120);
-    }
+    loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
+    int loadZ = random(tft.height());
+    int loadX = random(120);
+    //}
 
     if (data == node.ku8MBSuccess)
     {
