@@ -54,6 +54,8 @@ void loop()
 
   // Read 16 registers starting at 0x3100)
   result = node.readInputRegisters(0x2228, 16);
+  node.readHoldingRegisters(0x2228,1);
+  
   if (result == node.ku8MBSuccess)
   {
     Serial.print("current1: ");
