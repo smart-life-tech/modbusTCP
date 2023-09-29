@@ -63,7 +63,7 @@ void setup()
     digitalWrite(MAX485_DE, 0);
     Serial.begin(115200);
     spindleSerial.begin(115200);
-    node.begin(1, Serial);
+    node.begin(1, spindleSerial);
     spindle.begin(2, spindleSerial);
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
@@ -217,6 +217,7 @@ uint64_t getData()
     }
     return result;
 }
+
 void loop()
 {
     /* int loadS = random(tft.width()); // Replace with your actual load values
