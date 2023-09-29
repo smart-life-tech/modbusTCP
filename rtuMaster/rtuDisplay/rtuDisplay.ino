@@ -198,8 +198,8 @@ uint64_t getData()
     Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
 
     loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
-    int loadZ = random(tft.height());
-    int loadX = random(120);
+    loadZ = random(tft.height());
+    loadX = random(120);
     //}
 
     if (data == node.ku8MBSuccess)
