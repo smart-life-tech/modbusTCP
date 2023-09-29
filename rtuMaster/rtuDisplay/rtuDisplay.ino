@@ -2,7 +2,7 @@
 #include <Adafruit_ST7735.h>
 #include <ModbusMaster.h>
 #include <SoftwareSerial.h>
-SoftwareSerial spindleSerial(9, 10);
+SoftwareSerial spindleSerial(2, 3);
 #define TFT_CS 10 // Chip select line for TFT display
 #define TFT_RST 8 // Reset line for TFT (or connect to +3.3V)
 #define TFT_DC 7  // Data/Command line for TFT
