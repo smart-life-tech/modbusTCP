@@ -61,6 +61,7 @@ void setup()
     // Init in receive mode
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
+    Serial.begin(115200);
     spindleSerial.begin(115200);
     node.begin(1, Serial);
     spindle.begin(2, spindleSerial);
