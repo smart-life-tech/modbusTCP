@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "rtuMaster\\rtuMaster.ino",
+    "sketch": "rtuMaster\\rtuDisplay\\rtuDisplay.ino",
     "port": "COM9"
 }
