@@ -17,14 +17,17 @@ bool toggle = HIGH;
 
 int loads[3] = {};
 
-#define MAX485_DE 3
-#define MAX485_RE_NEG 2
+#define MAX485_DE 5
+#define MAX485_RE_NEG 4
+
 int loadS = 10; // Replace with your actual load values
 int loadZ = 10;
 int loadX = 10;
 // instantiate ModbusMaster object
 ModbusMaster node;
 ModbusMaster spindle;
+
+bool state = true;
 
 void preTransmission()
 {
@@ -36,38 +39,6 @@ void postTransmission()
 {
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
-}
-
-bool state = true;
-
-void setup()
-{
-    delay(1000);
-    // tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
-    tft.initR(0x00);
-    tft.setRotation(3);
-    // Set text color and size
-    tft.setTextColor(ST7735_BLUE);
-    tft.setTextSize(3);
-
-    // Clear the screen
-    tft.fillScreen(ST7735_BLACK);
-    pinMode(BL, OUTPUT);
-    loads[0] = 0;
-    loads[1] = 0;
-    loads[2] = 0;
-    pinMode(MAX485_RE_NEG, OUTPUT);
-    pinMode(MAX485_DE, OUTPUT);
-    // Init in receive mode
-    digitalWrite(MAX485_RE_NEG, 0);
-    digitalWrite(MAX485_DE, 0);
-    Serial.begin(115200);
-    spindleSerial.begin(115200);
-    node.begin(1, spindleSerial);
-    spindle.begin(2, spindleSerial);
-    // Callbacks allow us to configure the RS485 transceiver correctly
-    node.preTransmission(preTransmission);
-    node.postTransmission(postTransmission);
 }
 
 void drawLoadBar(int section, int loadValue)
@@ -185,8 +156,8 @@ uint64_t getData()
     state = !state;
 
     // Read 16 registers starting at 0x3100)
-    data = spindle.readHoldingRegisters(0x2228, 16);
-    result = node.readHoldingRegisters(0x2228, 10);
+    data = spindle.readHoldingRegisters(0x8b4, 16);
+    result = node.readHoldingRegisters(2228, 10);
 
     // if (result == node.ku8MBSuccess)
     // {
@@ -200,6 +171,10 @@ uint64_t getData()
     loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
     loadZ = random(tft.height());
     loadX = random(120);
+    Serial.print("data result 1: ");
+    Serial.println(data);
+    Serial.print("data result 2: ");
+    Serial.println(result);
     //}
 
     if (data == node.ku8MBSuccess)
@@ -216,6 +191,36 @@ uint64_t getData()
         loadX = random(120);
     }
     return result;
+}
+
+void setup()
+{
+    delay(1000);
+    // tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
+    tft.initR(0x00);
+    tft.setRotation(3);
+    // Set text color and size
+    tft.setTextColor(ST7735_BLUE);
+    tft.setTextSize(3);
+
+    // Clear the screen
+    tft.fillScreen(ST7735_BLACK);
+    pinMode(BL, OUTPUT);
+    loads[0] = 0;
+    loads[1] = 0;
+    loads[2] = 0;
+    pinMode(MAX485_RE_NEG, OUTPUT);
+    pinMode(MAX485_DE, OUTPUT);
+    // Init in receive mode
+    digitalWrite(MAX485_RE_NEG, 0);
+    digitalWrite(MAX485_DE, 0);
+    Serial.begin(115200);
+    spindleSerial.begin(115200);
+    node.begin(1, spindleSerial);
+    spindle.begin(2, spindleSerial);
+    // Callbacks allow us to configure the RS485 transceiver correctly
+    node.preTransmission(preTransmission);
+    node.postTransmission(postTransmission);
 }
 
 void loop()
