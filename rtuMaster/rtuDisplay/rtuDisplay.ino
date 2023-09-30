@@ -156,8 +156,9 @@ uint64_t getData()
     state = !state;
 
     // Read 16 registers starting at 0x3100)
+    spindle.writeSingleRegister(2228,16);
     data = spindle.readHoldingRegisters(0x8b4, 16);
-    result = node.readHoldingRegisters(2228, 10);
+    result = node.readInputRegisters(2228, 16);
 
     // if (result == node.ku8MBSuccess)
     // {
@@ -195,7 +196,6 @@ uint64_t getData()
 
 void setup()
 {
-    delay(1000);
     // tft.initR(INITR_BLACKTAB); // Initialize ST7735S display
     tft.initR(0x00);
     tft.setRotation(3);
@@ -218,6 +218,7 @@ void setup()
     spindleSerial.begin(115200);
     node.begin(1, spindleSerial);
     spindle.begin(2, spindleSerial);
+    
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
     node.postTransmission(postTransmission);
