@@ -156,8 +156,15 @@ uint64_t getData()
     state = !state;
 
     // Read 16 registers starting at 0x3100)
-    spindle.writeSingleRegister(2228, 16);
-
+    result = spindle.writeSingleRegister(2228, 16);
+    Serial.print("data writing result 2: ");
+    Serial.println(result);
+    delay(100);
+    result = node.writeSingleRegister(2228, 16);
+    Serial.print("data writing result at node 2: ");
+    Serial.println(result);
+    delay(100);
+    node.clearResponseBuffer();
     result = node.readInputRegisters(0x2228, 16);
     delay(100);
     // if (result == node.ku8MBSuccess)
@@ -176,6 +183,7 @@ uint64_t getData()
     Serial.print("data result 2: ");
     Serial.println(result);
     //}
+    node.clearResponseBuffer();
     data = spindle.readHoldingRegisters(0x8b4, 16);
     delay(500);
     if (data == node.ku8MBSuccess)
@@ -193,7 +201,8 @@ uint64_t getData()
     }
     Serial.print("data result 1: ");
     Serial.println(data);
-
+    node.clearResponseBuffer();
+    node.clearResponseBuffer();
     result = node.readDiscreteInputs(2228, 16);
     delay(100);
     // if (result == node.ku8MBSuccess)
