@@ -155,7 +155,6 @@ uint64_t getData()
     node.clearResponseBuffer();
     data = node.readHoldingRegisters(0x8b4, 16);
     delay(500);
-
     Serial.print("holding registers current1a: ");
     Serial.println(node.getResponseBuffer(0x00));
     Serial.print("holding registers current2a: ");
@@ -163,10 +162,12 @@ uint64_t getData()
     Serial.print("holding registers current3a: ");
     Serial.println(node.getResponseBuffer(0x02));
 
-    loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
-    loadZ = node.getResponseBuffer(0x01);
-    loadX = node.getResponseBuffer(0x02);
-
+    if ((node.getResponseBuffer(0) + node.getResponseBuffer(1) + node.getResponseBuffer(0)) < 2)
+    {
+        loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
+        loadZ = node.getResponseBuffer(0x01);
+        loadX = node.getResponseBuffer(0x02);
+    }
     Serial.print("data result 3: ");
     Serial.println(result);
     return result;
