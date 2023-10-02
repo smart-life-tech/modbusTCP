@@ -162,7 +162,7 @@ uint64_t getData()
     Serial.print("holding registers current3a: ");
     Serial.println(node.getResponseBuffer(0x02));
 
-    if ((node.getResponseBuffer(0) + node.getResponseBuffer(1) + node.getResponseBuffer(0)) < 2)
+    if ((node.getResponseBuffer(0) + node.getResponseBuffer(1) + node.getResponseBuffer(0)) > 0)
     {
         loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
         loadZ = node.getResponseBuffer(0x01);
