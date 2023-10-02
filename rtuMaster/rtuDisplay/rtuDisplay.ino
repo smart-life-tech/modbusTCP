@@ -151,74 +151,21 @@ uint64_t getData()
     uint8_t result;
     uint16_t data;
 
-    // Toggle the coil at address 0x0002 (Manual Load Control)
-    result = node.writeSingleCoil(0x0002, state);
-    state = !state;
-
-    // Read 16 registers starting at 0x3100)
-    result = node.writeSingleRegister(2228, 16);
-    Serial.print("data writing result of coil 2: ");
-    Serial.println(result);
-    delay(100);
-    result = node.writeSingleRegister(2228, 16);
-    Serial.print("data writing result at node 2: ");
-    Serial.println(result);
-
-    delay(100);
-    node.clearResponseBuffer();
     node.clearTransmitBuffer();
-    result = node.readInputRegisters(2228, 16);
-    delay(100);
-    // if (result == node.ku8MBSuccess)
-    // {
-    Serial.print("input registers current1: ");
-    Serial.println(node.getResponseBuffer(0x00));
-    Serial.print("input registers current: ");
-    Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
-    Serial.print("input registers current3: ");
-    Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
-
-    loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
-    loadZ = random(tft.height());
-    loadX = random(120);
-
-    Serial.print("data result of input registers : ");
-    Serial.println(result);
-    //}
     node.clearResponseBuffer();
     data = node.readHoldingRegisters(0x8b4, 16);
     delay(500);
-    //  if (data == node.ku8MBSuccess)
-    // {
+
     Serial.print("holding registers current1a: ");
-    Serial.println(node.getResponseBuffer(0x04) / 100.0f);
-    Serial.print("holding registers current2a: ");
-    Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
-    Serial.print("holding registers current3a: ");
-    Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
-
-    loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
-    loadZ = random(tft.height());
-    loadX = random(120);
-    //}
-    Serial.print("data result 1: ");
-    Serial.println(data);
-    node.clearResponseBuffer();
-    node.clearResponseBuffer();
-    result = node.readDiscreteInputs(2228, 16);
-    delay(100);
-    // if (result == node.ku8MBSuccess)
-    // {
-    Serial.print("input discrete inputs current1: ");
     Serial.println(node.getResponseBuffer(0x00));
-    Serial.print("input discrete inputs  current2 : ");
-    Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
-    Serial.print(" input discrete inputs  current3: ");
-    Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
+    Serial.print("holding registers current2a: ");
+    Serial.println(node.getResponseBuffer(0x01));
+    Serial.print("holding registers current3a: ");
+    Serial.println(node.getResponseBuffer(0x02));
 
     loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
-    loadZ = random(tft.height());
-    loadX = random(120);
+    loadZ = node.getResponseBuffer(0x01);
+    loadX = node.getResponseBuffer(0x02);
 
     Serial.print("data result 3: ");
     Serial.println(result);
@@ -248,7 +195,7 @@ void setup()
     Serial.begin(115200);
     spindleSerial.begin(115200);
     node.begin(1, spindleSerial);
-   // spindle.begin(2, spindleSerial);
+    // spindle.begin(2, spindleSerial);
 
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
