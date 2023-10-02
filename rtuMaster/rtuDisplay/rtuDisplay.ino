@@ -29,15 +29,16 @@ ModbusMaster spindle;
 
 bool state = true;
 
+
 void preTransmission()
 {
-    digitalWrite(MAX485_RE_NEG, 1);
+    digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 1);
 }
 
 void postTransmission()
 {
-    digitalWrite(MAX485_RE_NEG, 0);
+    digitalWrite(MAX485_RE_NEG, 1);
     digitalWrite(MAX485_DE, 0);
 }
 
