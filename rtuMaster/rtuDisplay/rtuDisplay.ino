@@ -156,7 +156,7 @@ uint64_t getData()
     state = !state;
 
     // Read 16 registers starting at 0x3100)
-    result = spindle.writeSingleRegister(2228, 16);
+    result = node.writeSingleRegister(2228, 16);
     Serial.print("data writing result of coil 2: ");
     Serial.println(result);
     delay(100);
@@ -191,13 +191,13 @@ uint64_t getData()
     //  if (data == node.ku8MBSuccess)
     // {
     Serial.print("holding registers current1a: ");
-    Serial.println(spindle.getResponseBuffer(0x04) / 100.0f);
+    Serial.println(node.getResponseBuffer(0x04) / 100.0f);
     Serial.print("holding registers current2a: ");
-    Serial.println(spindle.getResponseBuffer(0xC0) / 100.0f);
+    Serial.println(node.getResponseBuffer(0xC0) / 100.0f);
     Serial.print("holding registers current3a: ");
-    Serial.println((spindle.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
+    Serial.println((node.getResponseBuffer(0x0D) + node.getResponseBuffer(0x0E) << 16) / 100.0f);
 
-    loadS = spindle.getResponseBuffer(0x00); // Replace with your actual load values
+    loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
     loadZ = random(tft.height());
     loadX = random(120);
     //}
@@ -248,7 +248,7 @@ void setup()
     Serial.begin(115200);
     spindleSerial.begin(115200);
     node.begin(1, spindleSerial);
-    spindle.begin(2, spindleSerial);
+   // spindle.begin(2, spindleSerial);
 
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
