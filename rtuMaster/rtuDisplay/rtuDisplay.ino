@@ -9,6 +9,7 @@ SoftwareSerial spindleSerial(2, 3);
 #define BL 9
 int loadWidth = 100;
 int offset = 8;
+int safeCurrent =100;
 // Initialize the TFT display
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 const int sectionHeight = 40; // Each section's height (pixels)
@@ -75,7 +76,7 @@ void drawLoadBar(int section, int loadValue)
 
     // Determine the color based on the load value
     uint16_t loadColor;
-    if (loadValue < 100)
+    if (loadValue < safeCurrent)
     {
         loadColor = ST7735_GREEN;
     }
@@ -92,53 +93,53 @@ void drawLoadBar(int section, int loadValue)
     switch (section)
     {
     case 0:
-        if (loadValue <= 100)
+        if (loadValue <= safeCurrent)
         {
-            loadWidth = map(loadValue, 0, 100, 0, tft.width());
+            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
             tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
         }
-        if (loadValue > 100)
+        if (loadValue > safeCurrent)
         {
-            loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
-            loadValue = loadValue - 100;         // reminder value for the red
-            loadValue = 100 - loadValue;         // value for the yellow
-            loadWidth = map(loadValue, 0, 100, 0, tft.width());
+            loadValue = (200 * loadValue) / maxLoad; // the overload value reminder in percentage maxLoad max
+            loadValue = loadValue - safeCurrent;         // reminder value for the red
+            loadValue = safeCurrent - loadValue;         // value for the yellow
+            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
             tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
-            tft.fillRect(loadWidth - offset, 0, 160, sectionHeight, ST7735_BLUE);
+            tft.fillRect(loadWidth - offset, 0, 160, sectionHeight, ST7735_BLUE);// thi is red
         }
         break;
     case 1:
-        if (loadValue <= 100)
+        if (loadValue <= safeCurrent)
         {
-            loadWidth = map(loadValue, 0, 100, 0, tft.width());
+            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
             tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
         }
-        if (loadValue > 100)
+        if (loadValue > safeCurrent)
         {
-            loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
-            loadValue = loadValue - 100;         // reminder value for the red
-            loadValue = 100 - loadValue;         // value for the yellow
-            loadWidth = map(loadValue, 0, 100, 0, tft.width());
+            loadValue = (200 * loadValue) / maxLoad; // the overload value reminder in percentage maxLoad max
+            loadValue = loadValue - safeCurrent;         // reminder value for the red
+            loadValue = safeCurrent - loadValue;         // value for the yellow
+            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
             tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
             tft.fillRect(loadWidth - offset, 42, 160, sectionHeight, ST7735_BLUE);
         }
     case 2:
-        if (loadValue <= 100)
+        if (loadValue <= safeCurrent)
         {
-            loadWidth = map(loadValue, 0, 100, 0, tft.width());
+            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
             tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
         }
-        if (loadValue > 100)
+        if (loadValue > safeCurrent)
         {
-            loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
-            loadValue = loadValue - 100;         // reminder value for the red
-            loadValue = 100 - loadValue;         // value for the yellow
-            loadWidth = map(loadValue, 0, 100, 0, tft.width());
+            loadValue = (200 * loadValue) / maxLoad; // the overload value reminder in percentage maxLoad max
+            loadValue = loadValue - safeCurrent;         // reminder value for the red
+            loadValue = safeCurrent - loadValue;         // value for the yellow
+            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
             tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
             tft.fillRect(loadWidth - offset, 84, 160, sectionHeight, ST7735_BLUE);
@@ -198,7 +199,12 @@ uint64_t getData()
     Serial.println(node.getResponseBuffer(0x01));
     Serial.print("holding registers current3a: ");
     Serial.println(node.getResponseBuffer(0x02));
-
+    /*
+      like: rated current of the motor is 7 A, so it can be our 100%.
+     From register we read 318 (3.18 A). 318/700 = 45%
+    [9:16 AM, 10/9/2023] or we read 16 from register (0,16 A).
+    It is 0<0,16<1 so we display 1% to show that there is a load
+    */
     if (node.getResponseBuffer(0) > 0)
     {
         loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
