@@ -1,5 +1,5 @@
 {
     "board": "arduino:avr:uno",
-    "sketch": "rtuMaster\\rtuDisplay\\rtuDisplay.ino",
+    "sketch": "updatedv2\\updatedv2.ino",
     "port": "COM9"
 }
