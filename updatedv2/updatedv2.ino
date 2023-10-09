@@ -9,15 +9,26 @@ SoftwareSerial spindleSerial(2, 3);
 #define BL 9
 int loadWidth = 100;
 int offset = 8;
-int safeCurrent = 100;
 // Initialize the TFT display
 Adafruit_ST7735 tft = Adafruit_ST7735(TFT_CS, TFT_DC, TFT_RST);
 const int sectionHeight = 40; // Each section's height (pixels)
 const int maxLoad = 210;      // Maximum load value
 bool toggle = HIGH;
-// Offscreen buffer
-uint16_t **offscreenBuffer; // Pointer to a 2D array of uint16_t
-// Sample parameters for each axis
+
+int loads[3] = {};
+
+#define MAX485_DE 5
+#define MAX485_RE_NEG 4
+const int buzzerPin = 4;
+int loadS = 10; // Replace with your actual load values
+int loadZ = 10;
+int loadX = 10;
+// instantiate ModbusMaster object
+ModbusMaster node;
+ModbusMaster spindle;
+
+bool state = true;
+
 const int axisCount = 4; // Assuming you have 4 axes
 
 int modbusID[axisCount] = {1, 2, 3, 4};
@@ -33,31 +44,6 @@ int alarmTrigger[4] = {100, 100, 100, 100};
 const int buttonSetParameters = A0;  // Example pin, replace with your actual pin
 const int buttonResetAlarm = A1;     // Example pin, replace with your actual pin
 const int buttonResetMaxValues = A2; // Example pin, replace with your actual pin
-
-int loads[3] = {};
-
-#define MAX485_DE 5
-#define MAX485_RE_NEG 4 // unused
-const int buzzerPin = 4;
-int loadS = 10; // Replace with your actual load values
-int loadZ = 10;
-int loadX = 10;
-// instantiate ModbusMaster object
-ModbusMaster node;
-ModbusMaster spindle;
-
-bool state = true;
-
-void transferBufferToDisplay()
-{
-    for (int i = 0; i < tft.width(); i++)
-    {
-        for (int j = 0; j < tft.height(); j++)
-        {
-            tft.drawPixel(i, j, offscreenBuffer[i][j]);
-        }
-    }
-}
 
 void preTransmission()
 {
@@ -76,7 +62,7 @@ void drawLoadBar(int section, int loadValue)
 
     // Determine the color based on the load value
     uint16_t loadColor;
-    if (loadValue < safeCurrent)
+    if (loadValue < 100)
     {
         loadColor = ST7735_GREEN;
     }
@@ -93,67 +79,59 @@ void drawLoadBar(int section, int loadValue)
     switch (section)
     {
     case 0:
-        if (loadValue <= safeCurrent)
+        if (loadValue <= 100)
         {
-            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
+            loadWidth = map(loadValue, 0, 100, 0, tft.width());
             tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
         }
-        if (loadValue > safeCurrent)
+        if (loadValue > 100)
         {
-            loadValue = (200 * loadValue) / maxLoad; // the overload value reminder in percentage maxLoad max
-            loadValue = loadValue - safeCurrent;     // reminder value for the red
-            loadValue = safeCurrent - loadValue;     // value for the yellow
-            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
+            loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
+            loadValue = loadValue - 100;         // reminder value for the red
+            loadValue = 100 - loadValue;         // value for the yellow
+            loadWidth = map(loadValue, 0, 100, 0, tft.width());
             tft.fillRect(0, 0, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 0, loadWidth, sectionHeight, loadColor);
-            tft.fillRect(loadWidth - offset, 0, 160, sectionHeight, ST7735_BLUE); // thi is red
+            tft.fillRect(loadWidth - offset, 0, 160, sectionHeight, ST7735_BLUE);
         }
         break;
     case 1:
-        if (loadValue <= safeCurrent)
+        if (loadValue <= 100)
         {
-            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
+            loadWidth = map(loadValue, 0, 100, 0, tft.width());
             tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
         }
-        if (loadValue > safeCurrent)
+        if (loadValue > 100)
         {
-            loadValue = (200 * loadValue) / maxLoad; // the overload value reminder in percentage maxLoad max
-            loadValue = loadValue - safeCurrent;     // reminder value for the red
-            loadValue = safeCurrent - loadValue;     // value for the yellow
-            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
+            loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
+            loadValue = loadValue - 100;         // reminder value for the red
+            loadValue = 100 - loadValue;         // value for the yellow
+            loadWidth = map(loadValue, 0, 100, 0, tft.width());
             tft.fillRect(0, 42, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 42, loadWidth, sectionHeight, loadColor);
             tft.fillRect(loadWidth - offset, 42, 160, sectionHeight, ST7735_BLUE);
         }
     case 2:
-        if (loadValue <= safeCurrent)
+        if (loadValue <= 100)
         {
-            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
+            loadWidth = map(loadValue, 0, 100, 0, tft.width());
             tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
         }
-        if (loadValue > safeCurrent)
+        if (loadValue > 100)
         {
-            loadValue = (200 * loadValue) / maxLoad; // the overload value reminder in percentage maxLoad max
-            loadValue = loadValue - safeCurrent;     // reminder value for the red
-            loadValue = safeCurrent - loadValue;     // value for the yellow
-            loadWidth = map(loadValue, 0, safeCurrent, 0, tft.width());
+            loadValue = (200 * loadValue) / 210; // the overload value reminder in percentage 210 max
+            loadValue = loadValue - 100;         // reminder value for the red
+            loadValue = 100 - loadValue;         // value for the yellow
+            loadWidth = map(loadValue, 0, 100, 0, tft.width());
             tft.fillRect(0, 84, tft.width(), sectionHeight, ST7735_BLACK);
             tft.fillRect(0, 84, loadWidth, sectionHeight, loadColor);
             tft.fillRect(loadWidth - offset, 84, 160, sectionHeight, ST7735_BLUE);
         }
     default:
         break;
-    }
-    // Draw the load bar to the offscreen buffer
-    for (int i = 0; i < tft.width(); i++)
-    {
-        for (int j = 0; j < sectionHeight; j++)
-        {
-            offscreenBuffer[i][section + j] = (i < loadWidth) ? loadColor : ST7735_BLACK;
-        }
     }
     // Draw the load bar
 }
@@ -191,7 +169,7 @@ uint64_t getData()
 
     node.clearTransmitBuffer();
     node.clearResponseBuffer();
-    data = node.readHoldingRegisters(0x8b4, 16);
+    data = node.readHoldingRegisters(0x1008, 1);
     delay(500);
     Serial.print("holding registers current1a: ");
     Serial.println(node.getResponseBuffer(0x00));
@@ -199,12 +177,7 @@ uint64_t getData()
     Serial.println(node.getResponseBuffer(0x01));
     Serial.print("holding registers current3a: ");
     Serial.println(node.getResponseBuffer(0x02));
-    /*
-      like: rated current of the motor is 7 A, so it can be our 100%.
-     From register we read 318 (3.18 A). 318/700 = 45%
-    [9:16 AM, 10/9/2023] or we read 16 from register (0,16 A).
-    It is 0<0,16<1 so we display 1% to show that there is a load
-    */
+
     if (node.getResponseBuffer(0) > 0)
     {
         loadS = node.getResponseBuffer(0x00); // Replace with your actual load values
@@ -407,12 +380,6 @@ void setup()
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
     node.postTransmission(postTransmission);
-    // Allocate memory for the offscreen buffer
-    offscreenBuffer = new uint16_t *[tft.width()];
-    for (int i = 0; i < tft.width(); i++)
-    {
-        offscreenBuffer[i] = new uint16_t[tft.height()];
-    }
     pinMode(buttonSetParameters, INPUT_PULLUP);
     pinMode(buttonResetAlarm, INPUT_PULLUP);
     pinMode(buttonResetMaxValues, INPUT_PULLUP);
@@ -422,12 +389,12 @@ void setup()
 
 void loop()
 {
-    int loadS = random(tft.width()); // Replace with your actual load values
-    int loadZ = random(tft.height());
-    int loadX = random(120);
+    /* int loadS = random(tft.width()); // Replace with your actual load values
+     int loadZ = random(tft.height());
+     int loadX = random(120);*/
     tft.fillScreen(ST7735_BLACK);
-    // getData();
-    //  Draw load bars
+    getData();
+    // Draw load bars
     textbg();
     drawLoadBar(0, loadS);
     drawLoadBar(1, loadZ);
@@ -466,15 +433,6 @@ void loop()
     tft.setTextColor(ST7735_RED);
     tft.print(greatLoad(2, loadX));
     // tft.println("");
-    // Transfer the offscreen buffer to the display
-    // transferBufferToDisplay();
-    for (int i = 0; i < tft.width(); i++)
-    {
-        delete[] offscreenBuffer[i];
-    }
-    delete[] offscreenBuffer;
-    // displayParameters(0);  // Change the axis index to display parameters for a different axis
-
     checkAlarms();
 
     // Check button presses and perform actions
@@ -496,5 +454,5 @@ void loop()
         // Button to reset max values pressed
         resetMaxValues();
     }
-    delay(5000); // Adjust the update interval as needed
+    delay(1000); // Adjust the update interval as needed
 }

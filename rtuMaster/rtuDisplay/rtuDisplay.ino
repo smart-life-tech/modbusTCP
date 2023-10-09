@@ -153,7 +153,7 @@ uint64_t getData()
 
     node.clearTransmitBuffer();
     node.clearResponseBuffer();
-    data = node.readHoldingRegisters(0x8b4, 16);
+    data = node.readHoldingRegisters(0x1008, 1);
     delay(500);
     Serial.print("holding registers current1a: ");
     Serial.println(node.getResponseBuffer(0x00));
@@ -256,5 +256,5 @@ void loop()
     tft.print(greatLoad(2, loadX));
     // tft.println("");
 
-    delay(5000); // Adjust the update interval as needed
+   delay(1000); // Adjust the update interval as needed
 }
