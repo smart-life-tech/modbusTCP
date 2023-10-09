@@ -425,7 +425,7 @@ void loop()
     /* int loadS = random(tft.width()); // Replace with your actual load values
      int loadZ = random(tft.height());
      int loadX = random(120);*/
-    // tft.fillScreen(ST7735_BLACK);
+    tft.fillScreen(ST7735_BLACK);
     getData();
     // Draw load bars
     textbg();
@@ -467,14 +467,14 @@ void loop()
     tft.print(greatLoad(2, loadX));
     // tft.println("");
     // Transfer the offscreen buffer to the display
-    transferBufferToDisplay();
+    //transferBufferToDisplay();
     for (int i = 0; i < tft.width(); i++)
     {
         delete[] offscreenBuffer[i];
     }
     delete[] offscreenBuffer;
     // displayParameters(0);  // Change the axis index to display parameters for a different axis
-    delay(5000); // Adjust the update interval as needed
+  
     checkAlarms();
 
     // Check button presses and perform actions
@@ -496,4 +496,5 @@ void loop()
         // Button to reset max values pressed
         resetMaxValues();
     }
+      delay(5000); // Adjust the update interval as needed
 }
