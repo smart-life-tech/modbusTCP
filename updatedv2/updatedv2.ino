@@ -25,7 +25,7 @@ int loadZ = 10;
 int loadX = 10;
 // instantiate ModbusMaster object
 ModbusMaster node;
-ModbusMaster spindle;
+ModbusMaster node2;
 
 bool state = true;
 
@@ -169,23 +169,33 @@ uint64_t getData()
 
     node.clearTransmitBuffer();
     node.clearResponseBuffer();
-    data = node.readHoldingRegisters(0x1008, 1);
+    result = node.readHoldingRegisters(0x1008, 1);
     delay(500);
-    Serial.print("holding registers current1a: ");
+    Serial.print("holding registers 0x1008: ");
     Serial.println(node.getResponseBuffer(0x00));
-    Serial.print("holding registers current2a: ");
-    Serial.println(node.getResponseBuffer(0x01));
+    Serial.print("data result registers 0x1008: ");
+    Serial.println(result);
+
     Serial.print("holding registers current3a: ");
     Serial.println(node.getResponseBuffer(0x02));
-    if (result == 0)
+
+    //========================================================================
+    node2.clearTransmitBuffer();
+    node2.clearResponseBuffer();
+    data = node2.readHoldingRegisters(0x2262, 2);
+    delay(500);
+    Serial.print("holding registers 0x2262: ");
+    Serial.println(node2.getResponseBuffer(0x01));
+
+    if (data == 0)
     {
         loadS = node.getResponseBuffer(0x00); // Replace with your actual load value
-        loadZ = node.getResponseBuffer(0x01);
+        loadZ = node2.getResponseBuffer(0x01);
         loadX = node.getResponseBuffer(0x02);
     }
-    Serial.print("data result 3: ");
-    Serial.println(result);
-    return result;
+    Serial.print("data result 0x2262:: ");
+    Serial.println(data);
+    return data;
 }
 
 void displayParameters(int axisIndex)
@@ -271,7 +281,7 @@ void setParameters()
     uint16_t data;
     node.clearTransmitBuffer();
     node.clearResponseBuffer();
-    data = node.readHoldingRegisters(222, 16);
+    data = node.readWriteMultipleRegisters(222, 16);
     delay(500);
 
     auto intToStopBit = [](int value)
@@ -366,13 +376,18 @@ void setup()
     digitalWrite(MAX485_RE_NEG, 0);
     digitalWrite(MAX485_DE, 0);
     Serial.begin(115200);
-    spindleSerial.begin(115200);
+    // spindleSerial.begin(115200);
+    spindleSerial.begin(19200);
     node.begin(1, spindleSerial);
+    node2.begin(30, spindleSerial);
     // spindle.begin(2, spindleSerial);
 
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
     node.postTransmission(postTransmission);
+    node2.preTransmission(preTransmission);
+    node2.postTransmission(postTransmission);
+
     pinMode(buttonSetParameters, INPUT_PULLUP);
     pinMode(buttonResetAlarm, INPUT_PULLUP);
     pinMode(buttonResetMaxValues, INPUT_PULLUP);
@@ -385,7 +400,7 @@ void loop()
     /* int loadS = random(tft.width()); // Replace with your actual load values
      int loadZ = random(tft.height());
      int loadX = random(120);*/
-   // tft.fillScreen(ST7735_BLACK);
+    // tft.fillScreen(ST7735_BLACK);
     getData();
     // Draw load bars
     textbg();
@@ -447,5 +462,6 @@ void loop()
         // Button to reset max values pressed
         resetMaxValues();
     }
+
     delay(1000); // Adjust the update interval as needed
 }
