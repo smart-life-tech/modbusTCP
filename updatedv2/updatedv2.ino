@@ -195,11 +195,11 @@ uint64_t getData()
     //=============================================================
     if (data1 == 0)
     {
-        loadX = node.getResponseBuffer(0x00); // Replace with your actual load value
+        loadS = node.getResponseBuffer(0x00); // Replace with your actual load value
     }
     if (data2 == 0)
     {
-        loadS = spindle.getResponseBuffer(0x01);
+        loadX = spindle.getResponseBuffer(0x01);
     }
     if (data3 == 0)
     {
@@ -441,10 +441,10 @@ void loop()
     tft.setTextColor(ST7735_RED);
     tft.print("X ");
     tft.setTextColor(ST7735_WHITE);
-    tft.print(loadZ);
+    tft.print(loadX);
     tft.setCursor(120, 55);
     tft.setTextColor(ST7735_RED);
-    tft.print(greatLoad(1, loadZ));
+    tft.print(greatLoad(1, loadX));
     // tft.println("");
 
     tft.setCursor(2, 98);
