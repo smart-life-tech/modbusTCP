@@ -195,11 +195,11 @@ uint64_t getData()
     //=============================================================
     if (data1 == 0)
     {
-        loadS = node.getResponseBuffer(0x00); // Replace with your actual load value
+        loadX = node.getResponseBuffer(0x00); // Replace with your actual load value
     }
     if (data2 == 0)
     {
-        loadX = spindle.getResponseBuffer(0x01);
+        loadS = spindle.getResponseBuffer(0x01);
     }
     if (data3 == 0)
     {
