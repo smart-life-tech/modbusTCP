@@ -25,8 +25,8 @@ int loadZ = 10;
 int loadX = 10;
 // instantiate ModbusMaster object
 ModbusMaster node;
-ModbusMaster node2;
-
+ModbusMaster spindle;
+ModbusMaster zAxis;
 bool state = true;
 
 const int axisCount = 4; // Assuming you have 4 axes
@@ -176,22 +176,27 @@ uint64_t getData()
     Serial.print("data result registers 0x1008: ");
     Serial.println(result);
 
-    Serial.print("holding registers current3a: ");
-    Serial.println(node.getResponseBuffer(0x02));
-
     //========================================================================
-    node2.clearTransmitBuffer();
-    node2.clearResponseBuffer();
-    data = node2.readHoldingRegisters(0x2262, 2);
+    spindle.clearTransmitBuffer();
+    spindle.clearResponseBuffer();
+    data = spindle.readHoldingRegisters(0x2262, 2);
     delay(500);
     Serial.print("holding registers 0x2262: ");
-    Serial.println(node2.getResponseBuffer(0x01));
+    Serial.println(spindle.getResponseBuffer(0x01));
+    //=========================================================================
 
+    spindle.clearTransmitBuffer();
+    spindle.clearResponseBuffer();
+    data = zAxis.readHoldingRegisters(0x2262, 2);
+    delay(500);
+    Serial.print("a axis at  0x2262: ");
+    Serial.println(spindle.getResponseBuffer(0x01));
+    //=============================================================
     if (data == 0)
     {
-        loadS = node.getResponseBuffer(0x00); // Replace with your actual load value
-        loadZ = node2.getResponseBuffer(0x01);
-        loadX = node.getResponseBuffer(0x02);
+        loadX = node.getResponseBuffer(0x00); // Replace with your actual load value
+        loadS = spindle.getResponseBuffer(0x01);
+        loadZ = zAxis.getResponseBuffer(0x00);
     }
     Serial.print("data result 0x2262:: ");
     Serial.println(data);
@@ -379,14 +384,17 @@ void setup()
     // spindleSerial.begin(115200);
     spindleSerial.begin(19200);
     node.begin(1, spindleSerial);
-    node2.begin(30, spindleSerial);
+    spindle.begin(30, spindleSerial);
+    zAxis.begin(3, spindleSerial);
     // spindle.begin(2, spindleSerial);
 
     // Callbacks allow us to configure the RS485 transceiver correctly
     node.preTransmission(preTransmission);
     node.postTransmission(postTransmission);
-    node2.preTransmission(preTransmission);
-    node2.postTransmission(postTransmission);
+    spindle.preTransmission(preTransmission);
+    spindle.postTransmission(postTransmission);
+    zAxis.preTransmission(preTransmission);
+    zAxis.postTransmission(postTransmission);
 
     pinMode(buttonSetParameters, INPUT_PULLUP);
     pinMode(buttonResetAlarm, INPUT_PULLUP);
@@ -405,8 +413,8 @@ void loop()
     // Draw load bars
     textbg();
     drawLoadBar(0, loadS);
-    drawLoadBar(1, loadZ);
-    drawLoadBar(2, loadX);
+    drawLoadBar(1, loadX);
+    drawLoadBar(2, loadZ);
     // Clear the screen
 
     tft.setTextSize(2);
