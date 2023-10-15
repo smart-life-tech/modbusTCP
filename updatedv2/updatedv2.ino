@@ -419,9 +419,9 @@ void loop()
     getData();
     // Draw load bars
     textbg();
-    drawLoadBar(0, loadS);
+    drawLoadBar(0, loadZ);
     drawLoadBar(1, loadX);
-    drawLoadBar(2, loadZ);
+    drawLoadBar(2, loadS);
     // Clear the screen
 
     tft.setTextSize(2);
