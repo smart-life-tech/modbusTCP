@@ -419,9 +419,9 @@ void loop()
     getData();
     // Draw load bars
     textbg();
-    drawLoadBar(0, loadZ);
+    drawLoadBar(0, loadS);
     drawLoadBar(1, loadX);
-    drawLoadBar(2, loadS);
+    drawLoadBar(2, loadZ);
     // Clear the screen
 
     tft.setTextSize(2);
@@ -439,7 +439,7 @@ void loop()
 
     tft.setCursor(2, 55);
     tft.setTextColor(ST7735_RED);
-    tft.print("Z ");
+    tft.print("X ");
     tft.setTextColor(ST7735_WHITE);
     tft.print(loadZ);
     tft.setCursor(120, 55);
@@ -449,12 +449,12 @@ void loop()
 
     tft.setCursor(2, 98);
     tft.setTextColor(ST7735_RED);
-    tft.print("X ");
+    tft.print("Z ");
     tft.setTextColor(ST7735_WHITE);
-    tft.print(loadX);
+    tft.print(loadZ);
     tft.setCursor(120, 98);
     tft.setTextColor(ST7735_RED);
-    tft.print(greatLoad(2, loadX));
+    tft.print(greatLoad(2, loadZ));
     // tft.println("");
     checkAlarms();
 
