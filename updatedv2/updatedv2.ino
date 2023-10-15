@@ -198,7 +198,7 @@ uint64_t getData()
     data3 = zAxis.readHoldingRegisters(0x1008, 1);
     delay(500);
     Serial.print("a axis at  0x2262: ");
-    Serial.println(spindle.getResponseBuffer(0x01));
+    Serial.println(zAxis.getResponseBuffer(0x01));
     if (data3 == 0)
     {
         loadZ = zAxis.getResponseBuffer(0x00);
