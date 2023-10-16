@@ -170,6 +170,7 @@ uint64_t getData()
     uint16_t data3;
     node.clearTransmitBuffer();
     node.clearResponseBuffer();
+    node.beginTransmission(0x1008);
     data1 = node.readHoldingRegisters(0x1008, 1);
     delay(500);
     Serial.print("holding registers 0x1008: ");
@@ -209,8 +210,6 @@ uint64_t getData()
     }
     //=============================================================
 
-    Serial.print("data result 1 ");
-    Serial.println(data1);
     return data1;
 }
 
