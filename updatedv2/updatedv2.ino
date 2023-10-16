@@ -175,7 +175,7 @@ uint64_t getData()
     Serial.print("holding registers 0x1008: ");
     Serial.println(node.getResponseBuffer(0x00));
     Serial.print("data result registers 0x1008: ");
-    Serial.println(result);
+    Serial.println(data1);
     if (data1 == 0)
     {
         loadX = node.getResponseBuffer(0x00); // Replace with your actual load value
@@ -187,6 +187,8 @@ uint64_t getData()
     delay(500);
     Serial.print("holding registers 0x2262: ");
     Serial.println(spindle.getResponseBuffer(0x01));
+    Serial.print("data result registers 0x2262: ");
+    Serial.println(data2);
     if (data2 == 0)
     {
         loadS = spindle.getResponseBuffer(0x01);
@@ -197,8 +199,10 @@ uint64_t getData()
     zAxis.clearResponseBuffer();
     data3 = zAxis.readHoldingRegisters(0x1008, 1);
     delay(500);
-    Serial.print("a axis at  0x2262: ");
+    Serial.print("z axis at  0x2262: ");
     Serial.println(zAxis.getResponseBuffer(0x01));
+    Serial.print("data result of z axis: ");
+    Serial.println(data3);
     if (data3 == 0)
     {
         loadZ = zAxis.getResponseBuffer(0x00);
